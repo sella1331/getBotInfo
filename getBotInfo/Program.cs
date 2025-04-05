@@ -2,6 +2,7 @@
 using getBotInfo;
 
 string help = "/start\t\tasks for user name(no numbers)\n" +
+
                "/help\t\tdispays user manual\n" +
                "/info\t\tdisplays program version and release date\n" +
                "/echo\t\tavaliable only after you entered your name, repeats your input\n" +
@@ -9,6 +10,7 @@ string help = "/start\t\tasks for user name(no numbers)\n" +
                "/showtasks\tshows all tasks\n" +
                "/removetask\t" + "Removes a task from the list\n" +
                "/exit\t\texits your programm\n";
+
 string info = "Version 1.0.1 Created 03.03.2025";
 string messageCommand = "";
 string userName = "";
@@ -37,10 +39,8 @@ catch (Exception e)
     Console.WriteLine("Произошла непредвиденная ошибка: " + e.GetType() + e.Message + e.StackTrace+  e.InnerException);
 }
  
- 
- 
- 
- 
+
+
 void GetBotInfo(string message, string pattern)
 {
     int maxNumberTasks = 0;
@@ -51,6 +51,7 @@ void GetBotInfo(string message, string pattern)
  
     while (message != "/exit")
     {
+
         Console.WriteLine("Hello, " + userName + "please, enter commands:");
         Console.WriteLine("/start\n/help\n/info\n/echo\n/addtask\n/showtasks\n/removetask\n/exit");
         message = Console.ReadLine();
@@ -59,6 +60,7 @@ void GetBotInfo(string message, string pattern)
         {
             case ("/start"):
                 GetStartMessage(ref userName, pattern);
+
                 break;
             case ("/help"):
                 Console.WriteLine(help);
@@ -67,10 +69,21 @@ void GetBotInfo(string message, string pattern)
                 Console.WriteLine(info);
                 break;
             case string text when text.StartsWith("/echo"):
+
                 GetMessageEcho(text);
                 break;
             case ("/addtask"):      
                 AddtaskList(maxNumberTasks, taskLengthLimit);
+                break;
+            case ("/showtasks"):
+                ShowTasks();
+                break;
+            case ("/removetask"):
+                RemoveTask();
+
+                break;
+            case ("/addtask"):
+                AddtaskList();
                 break;
             case ("/showtasks"):
                 ShowTasks();
@@ -143,9 +156,7 @@ string GetUserName(string pattern, string userName)
     }
     return userName.Trim();
 }
- 
- 
-void GetMessageEcho(string text)
+ void GetMessageEcho(string text)
 {
     if (string.IsNullOrEmpty(userName) || text.Length < 6)
     {
@@ -202,6 +213,8 @@ void GetInput(int taskLengthLimit)
             Console.WriteLine(e.Message);
         }
       
+
+
         taskList.Add(input);
         Console.WriteLine("Task added");
     }
@@ -221,43 +234,3 @@ int ParseAndValidateInt(string? str, int min, int max)
     }
     return value;
 }
- 
-void ShowTasks()
-{
-    if (taskList.Count != 0)
-    {
-        Console.WriteLine("Tasks:");
-        foreach (var el in taskList)
-        {
-            Console.WriteLine(el);
-        }
-    }
-    else Console.WriteLine("No tasks yet");
-}
- 
-void RemoveTask()
-{
-    if (taskList.Count != 0)
-    {
-        string numberTask = null;
-        int count = 1;
-        Console.WriteLine("Please enter the number of the task you would like to remove:");
-        foreach (var el in taskList)
-        {
-            Console.WriteLine(count++ + ". " + el);
-        }
-        while (String.IsNullOrWhiteSpace(numberTask))
-        {
-            numberTask = Console.ReadLine();
-            if (int.TryParse(numberTask, out int num) && num <= taskList.Count) taskList.RemoveAt(--num);
-            else
-            {
-                Console.WriteLine("Error, repeat enter, please");
-                numberTask = String.Empty;
-            }
-        }
-        ;
-    }
-    else Console.WriteLine("Your tasklist is empty");
-}
- 
